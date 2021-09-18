@@ -4,23 +4,28 @@ String textForSMS;
 
 int trig = 5;
 int echo = 4;
-int red =9;
-int green = 7;
-int yellow = 8;
 int buzzer = 11;
+int red = 7;
+int green = 9;
+int yellow = 8;
 int distance;
 int time;
 
 void setup() {
-  Serial.begin(9600);
-  SIM900.begin(9600);
-  pinMode(trig, OUTPUT);
-  pinMode(echo, INPUT);
-  pinMode(buzzer, OUTPUT);
-  pinMode(red, OUTPUT);
-  pinMode(green, OUTPUT);
-  pinMode(yellow, OUTPUT);
-
+Serial.begin(9600);
+SIM900.begin(9600); // original 19200. while enter 9600 for sim900A
+Serial.println(" logging time completed!");
+pinMode(echo, INPUT);
+pinMode(trig, OUTPUT);
+pinMode(buzzer, OUTPUT);
+pinMode(red, OUTPUT);
+pinMode(green, OUTPUT);
+pinMode(yellow,OUTPUT);
+digitalWrite(buzzer, LOW);
+digitalWrite(red, LOW);
+digitalWrite(green, LOW);
+digitalWrite(yellow, LOW);
+delay(100);
 }
 
 void loop() {
@@ -30,48 +35,48 @@ void loop() {
   time = pulseIn(echo, HIGH);
   distance = (time * 0.034)/2;
 
-
-  if(distance<=20){
-    textForSMS =  "INTRUDER ALERT";
-    digitalWrite(red, HIGH);
-    digitalWrite(green, LOW);
-    digitalWrite(yellow, LOW);
-    digitalWrite(buzzer, HIGH);
-    sendSMS(textForSMS);
-    Serial.println(textForSMS);
-    Serial.println("message sent.");
-    delay(500);
-  }
-  if((distance>20) && (distance<=50)){
-    digitalWrite(yellow, HIGH);
-    digitalWrite(red, LOW);
-    digitalWrite(green, LOW);
-  }
-  if (distance>50){
-    digitalWrite(green, HIGH);
-    digitalWrite(red, LOW);
-    digitalWrite(yellow, LOW);
-  }
-  else{
-    digitalWrite(buzzer, LOW);
-    delay(500);
-  }
-
+  
+if (distance<=20) 
+{
+textForSMS =  "INTRUDER ALERT ";
+digitalWrite(buzzer, HIGH);
+digitalWrite(red, HIGH);
+digitalWrite(green, LOW);
+digitalWrite(yellow, LOW);
+sendSMS(textForSMS);
+Serial.println(textForSMS);
+Serial.println("message sent.");
+delay(5000);
 }
 
+if ((distance>20)&& (distance<=50)) 
+{
+digitalWrite(buzzer, LOW);
+digitalWrite(red, LOW);
+digitalWrite(green, LOW);
+digitalWrite(yellow, HIGH);
+delay(1000);
+}
+
+if (distance>50) 
+{
+digitalWrite(buzzer, LOW);
+digitalWrite(red, LOW);
+digitalWrite(green, HIGH);
+digitalWrite(yellow, LOW);
+delay(1000);
+}
+}
 
 void sendSMS(String message)
 {
-  SIM900.print("AT+CMGF=1\r");                     // AT command to send SMS message
-  delay(1000);
-  SIM900.println("AT + CMGS = \"+919908310707\"");  // recipient's mobile number, in international format
-
-  delay(1000);
-  SIM900.println("INTRUDER ALERT");                         // message to send
-
-  SIM900.println((char)26);                        // End AT command with a ^Z, ASCII code 26
-  delay(1000);
-  SIM900.println();
-  // give module time to send SMS
-
+SIM900.print("AT+CMGF=1\r");                     // AT command to send SMS message
+delay(1000);
+SIM900.println("AT + CMGS = \"+919908310707\"");  // recipient's mobile number, in international format
+delay(1000);
+SIM900.println(message);                         // message to send
+SIM900.println((char)26);                        // End AT command with a ^Z, ASCII code 26
+delay(1000);
+SIM900.println();
+// give module time to send SMS
 }
