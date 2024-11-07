@@ -1,8 +1,8 @@
-# Ultrasonic_Security_Sensor
-
-This is a security system based on the range of a person with respect to a particular guarding material. This is mostly used in residential and commercial purposes for security management in case of an intruder.The code for the arduino is attached.  
+# Ultrasonic_Security_Sensor  
 
 Arduino-Based Security System  
+
+This is a security system based on the range of a person with respect to a particular guarding material. This is mostly used in residential and commercial purposes for security management in case of an intruder.The code for the arduino is attached.  
 
 This Arduino project implements a security system that utilizes an ultrasonic sensor to detect intruders within a specified distance range. When an intruder is detected, the system activates an alarm, sends an SMS alert to a designated phone number, and illuminates red and yellow LEDs to indicate an alert state.  
 
